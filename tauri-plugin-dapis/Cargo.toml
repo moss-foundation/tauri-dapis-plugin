@@ -1,0 +1,10 @@
+[package]
+name = "tauri-plugin-dapis"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+anyhow = { version = "1.0.98" }
+axum = { version = "0.8.4", features = ["ws"] }
+tauri = { version = "2.5.1", features = [] }
+tokio = { version = "1.45.0", features = [] }
