@@ -549,6 +549,7 @@ dependencies = [
  "serde_json",
  "tauri",
  "tauri-build",
+ "tauri-plugin-dapis",
  "tokio",
 ]
 
@@ -3343,6 +3344,16 @@ dependencies = [
  "syn 2.0.101",
  "tauri-codegen",
  "tauri-utils",
+]
+
+[[package]]
+name = "tauri-plugin-dapis"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "axum",
+ "tauri",
+ "tokio",
 ]
 
 [[package]]

@@ -8,9 +8,9 @@ use tauri::plugin::TauriPlugin;
 use tauri::{AppHandle, Runtime};
 const DEFAULT_PORT: usize = 12345;
 
-struct AxumState<R: Runtime> {
+pub struct AxumState<R: Runtime> {
     // This can be used to access state managed by tauri
-    app_handle: AppHandle<R>,
+    pub app_handle: AppHandle<R>,
 }
 
 impl<R: Runtime> Clone for AxumState<R> {
@@ -36,7 +36,7 @@ impl<R: Runtime> Builder<R> {
 
     pub fn routes(
         self,
-        routes: impl IntoIterator<Item=(String, MethodRouter<AxumState<R>>)>,
+        routes: impl IntoIterator<Item = (String, MethodRouter<AxumState<R>>)>,
     ) -> Self {
         Self {
             routes: routes.into_iter().collect(),

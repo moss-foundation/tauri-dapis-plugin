@@ -1,10 +1,10 @@
-use crate::server::AxumState;
 use axum::Json;
 use axum::extract::State;
 use axum::response::IntoResponse;
 use serde::{Deserialize, Serialize};
 use std::sync::Mutex;
-use tauri::{AppHandle, Manager};
+use tauri::{AppHandle, Manager, Runtime};
+use tauri_plugin_dapis::AxumState;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SetStateInput {
@@ -23,18 +23,24 @@ impl IntoResponse for SetStateOutput {
 }
 
 #[tauri::command(async)]
-pub async fn set_state(app_handle: AppHandle, input: SetStateInput) -> SetStateOutput {
+pub async fn set_state<R: Runtime>(
+    app_handle: AppHandle<R>,
+    input: SetStateInput,
+) -> SetStateOutput {
     set_state_impl(app_handle, input).await
 }
 
-pub async fn set_state_handler(
-    State(state): State<AxumState>,
+pub async fn set_state_handler<R: Runtime>(
+    State(state): State<AxumState<R>>,
     Json(payload): Json<SetStateInput>,
 ) -> SetStateOutput {
     set_state_impl(state.app_handle.clone(), payload).await
 }
 
-async fn set_state_impl(app_handle: AppHandle, input: SetStateInput) -> SetStateOutput {
+async fn set_state_impl<R: Runtime>(
+    app_handle: AppHandle<R>,
+    input: SetStateInput,
+) -> SetStateOutput {
     let state = app_handle.state::<Mutex<String>>();
     let mut state_lock = state.lock().unwrap();
     let old_state = state_lock.clone();
