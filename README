@@ -1,0 +1,43 @@
+Run `pnpm run dev` at examples/test-app
+And then run `cargo run` at examples/test-app-bin
+
+Example endpoints:
+
+POST "/emit":
+Payload: JSON {
+    "event_name": string,
+    "payload": string
+}
+Response: JSON {
+    "status": string
+}
+
+
+POST "/greet"
+Payload: JSON {
+    "name": string
+}
+Response: JSON {
+    "message": string
+}
+
+POST "/set-state"
+Payload: JSON {
+    "state": string
+}
+Response: JSON {
+    "old_state": string
+}
+
+WebSocket "/stream"
+Payload: JSON {
+    "upper_limit": i32
+}
+StreamEvent: JSON {
+    "current": i32
+}
+
+WebSocket "/{event_name}"
+StreamEvent: JSON {
+    "payload": string
+}
