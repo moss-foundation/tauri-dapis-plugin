@@ -63,26 +63,25 @@ impl<R: Runtime> Builder<R> {
                 }
                 let axum_router = axum_router.with_state(state);
 
-                // We use a channel to propagate error out of this future
-                let (tx, rx) = channel();
+                let (error_tx, error_rx) = channel();
                 tokio::spawn(async move {
                     let listener =
                         tokio::net::TcpListener::bind(format!("127.0.0.1:{}", self.port)).await;
 
                     match listener {
                         Ok(listener) => {
-                            let _ = tx.send(Ok(()));
+                            let _ = error_tx.send(Ok(()));
                             axum::serve(listener, axum_router)
                                 .await
                                 .expect("axum::serve will never return an error")
                         }
                         Err(err) => {
-                            let _ = tx.send(Err(err));
+                            let _ = error_tx.send(Err(err));
                         }
                     }
                 });
 
-                if let Err(e) = rx.recv() {
+                if let Err(e) = error_rx.recv() {
                     Err(e.into())
                 } else {
                     Ok(())
