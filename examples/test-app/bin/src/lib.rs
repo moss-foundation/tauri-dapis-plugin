@@ -3,9 +3,8 @@ pub mod commands;
 use std::string::ToString;
 use std::sync::Mutex;
 
-use crate::commands::emit::emit_handler;
+use crate::commands::emit::{emit, emit_handler};
 use crate::commands::greet::{greet, greet_handler};
-use crate::commands::listen::listen_handler;
 use crate::commands::set_state::{set_state, set_state_handler};
 use crate::commands::stream::{stream, stream_handler};
 use axum::response::IntoResponse;
@@ -18,7 +17,6 @@ pub async fn run() {
         ("/greet".to_string(), post(greet_handler)),
         ("/set-state".to_string(), post(set_state_handler)),
         ("/stream".to_string(), any(stream_handler)),
-        ("/listen".to_string(), any(listen_handler)),
         ("/emit".to_string(), post(emit_handler)),
     ];
     tauri::Builder::default()
@@ -34,7 +32,7 @@ pub async fn run() {
                 .build()
                 .expect("Unable to initialize tauri_plugin_dapis"),
         )
-        .invoke_handler(tauri::generate_handler![greet, set_state, stream])
+        .invoke_handler(tauri::generate_handler![greet, set_state, stream, emit])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

@@ -57,6 +57,6 @@ async fn handle_listen_socket<R: Runtime>(
     }
 
     // Deregister the event listener when connection ends
-    dbg!(format!("Client disconnected, unlistening {listener_id}"));
+    dbg!("Client disconnected, unlistening: ", listener_id);
     state.app_handle.unlisten(listener_id)
 }
