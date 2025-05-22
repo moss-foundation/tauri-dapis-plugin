@@ -30,6 +30,7 @@ pub async fn run() {
             tauri_plugin_dapis::Builder::new()
                 .routes(routes)
                 .port(12345)
+                .events(vec!["1".to_string(), "2".to_string()])
                 .build()
                 .expect("Unable to initialize tauri_plugin_dapis"),
         )
